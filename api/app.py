@@ -7,7 +7,7 @@ app = Flask(__name__)
 def main():
     return json.dumps({"name": "bob", "number": 3})
 
-def solve(chars):
+# def solve(chars):
     
 
 if __name__ == '__main__':
