@@ -1,33 +1,65 @@
-from flask import Flask
+from flask import Flask, abort,request
 import json
-import itertools
+from flask_limiter import Limiter,util
+from itertools import permutations,combinations
 
- 
+
+
+with open("dictionary.json") as json_file:
+    dictionary = json.load(json_file)
+
 app = Flask(__name__)
+limiter = Limiter(
+    util.get_remote_address,
+    app=app,
+    default_limits=["200 per day", "5 per hour"],
+)
 
-@app.route('/')
+
+@app.route('/', methods=["GET"])
 def main():
-    return solve("gainly")
+    string = request.args.get("string")
+    if len(string) != 6:
+        abort(401, description="Improper string length")
+    answer = {}
+    for item in solve(string):
+        l = len(item)
+        if l == 6:
+            answer[item] = 2000
+        elif l == 5:
+            answer[item] = 1200
+        elif l == 4:
+            answer[item] = 400
+        elif l == 3:
+            answer[item] = 100
+    return json.dumps(answer)
+    
+    
+    return solve("jatpre")
 
 def solve(chars):
-    from itertools import permutations,combinations
-    import enchant
-
-    dictionary = enchant.Dict("en_US")
     chars = list(chars)
     solutions = []
 
     # For all words from 2 letters to max letters
-    for i in range(2, len(chars)+1):
+    for i in range(3, len(chars)+1):
         # Generate all combinations of those letters 
         for current_set in combinations(chars, i):
             # Generate all orders of those combinations 
             for current in permutations(current_set):
                 current_word = ''.join(current)
-                if dictionary.check(current_word)and current_word not in solutions:
+                if check(current_word) and current_word not in solutions:
                     solutions.append(current_word)
     return solutions
 
+def check(word):
+    word = word.upper()
+    if word[0:2] in dictionary:
+        wordList = dictionary[word[0:2]]
+        for item in wordList:
+            if word == item:
+                return True
+    return False
     
 
 if __name__ == '__main__':
