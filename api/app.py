@@ -40,7 +40,7 @@ def main():
     return json.dumps(answer)
     
     
-    return solve("jatpre")
+
 
 def solve(chars):
     chars = list(chars)
