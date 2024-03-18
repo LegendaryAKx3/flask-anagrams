@@ -22,7 +22,7 @@ def main():
     if len(string) != 6:
         abort(401, description="Improper string length")
     answer = {}
-    for item in solve(string):
+    for item in solve(string)[::-1]:
         l = len(item)
         if l == 6:
             answer[item] = 2000
@@ -34,8 +34,6 @@ def main():
             answer[item] = 100
     return json.dumps(answer)
     
-    
-    return solve("jatpre")
 
 def solve(chars):
     chars = list(chars)
