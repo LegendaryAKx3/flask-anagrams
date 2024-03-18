@@ -3,8 +3,6 @@ import json
 from flask_limiter import Limiter,util
 from itertools import permutations,combinations
 
-
-
 with open("dictionary.json") as json_file:
     dictionary = json.load(json_file)
 
@@ -12,15 +10,22 @@ app = Flask(__name__)
 limiter = Limiter(
     util.get_remote_address,
     app=app,
-    default_limits=["200 per day", "5 per hour"],
+    default_limits=["5 per minute"],
 )
 
 
 @app.route('/', methods=["GET"])
 def main():
     string = request.args.get("string")
+    if string == None:
+        abort(400, description="No string given")
+
     if len(string) != 6:
-        abort(401, description="Improper string length")
+        abort(400, description="Improper string length")
+
+    if not string.isalpha():
+        abort(400, description="Improper character in string")
+
     answer = {}
     for item in solve(string)[::-1]:
         l = len(item)
@@ -34,6 +39,8 @@ def main():
             answer[item] = 100
     return json.dumps(answer)
     
+    
+    return solve("jatpre")
 
 def solve(chars):
     chars = list(chars)
@@ -50,7 +57,7 @@ def solve(chars):
                     solutions.append(current_word)
     return solutions
 
-def check(word):
+def check(word: str) -> bool:
     word = word.upper()
     if word[0:2] in dictionary:
         wordList = dictionary[word[0:2]]
@@ -61,4 +68,4 @@ def check(word):
     
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
