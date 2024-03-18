@@ -17,6 +17,9 @@ limiter = Limiter(
 @app.route('/', methods=["GET"])
 def main():
     string = request.args.get("string")
+    if string == None:
+        abort(400, description="No string given")
+
     if len(string) != 6:
         abort(400, description="Improper string length")
 
