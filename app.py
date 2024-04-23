@@ -7,11 +7,11 @@ with open("dictionary.json") as json_file:
     dictionary = json.load(json_file)
 
 app = Flask(__name__)
-# limiter = Limiter(
-#     util.get_remote_address,
-#     app=app,
-#     default_limits=["5 per minute"],
-# )
+limiter = Limiter(
+    util.get_remote_address,
+    app=app,
+    default_limits=["20 per minute"],
+)
 
 
 @app.route('/', methods=["GET"])
