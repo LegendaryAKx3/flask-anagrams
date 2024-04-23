@@ -10,7 +10,7 @@ app = Flask(__name__)
 limiter = Limiter(
     util.get_remote_address,
     app=app,
-    default_limits=["20 per minute"],
+    default_limits=["25 per minute"],
 )
 
 
