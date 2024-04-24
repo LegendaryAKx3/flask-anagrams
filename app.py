@@ -2,11 +2,13 @@ from flask import Flask, abort,request
 import json
 from flask_limiter import Limiter,util
 from itertools import permutations,combinations
+from flask_cors import CORS
 
 with open("dictionary.json") as json_file:
     dictionary = json.load(json_file)
 
 app = Flask(__name__)
+CORS(app)
 limiter = Limiter(
     util.get_remote_address,
     app=app,

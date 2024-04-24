@@ -3,6 +3,7 @@ click==8.1.7
 colorama==0.4.6
 Deprecated==1.2.14
 Flask==3.0.3
+Flask-Cors==4.0.0
 Flask-Limiter==3.5.1
 importlib_resources==6.4.0
 itsdangerous==2.2.0
