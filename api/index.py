@@ -9,11 +9,7 @@ with open("dictionary.json") as json_file:
 
 app = Flask(__name__)
 CORS(app)
-limiter = Limiter(
-    util.get_remote_address,
-    app=app,
-    default_limits=["25 per minute"],
-)
+
 
 
 @app.route('/', methods=["GET"])
